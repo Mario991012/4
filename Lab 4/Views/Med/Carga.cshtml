@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Carga de archivo";
+}
+
+<h2>Carga el archivo y la cantidad de dato por nodo para continuar</h2>
+
+<section>
+    @using (Html.BeginForm("Upload", "Med", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="text" name="nodo" />
+        <br />
+        <input type="file" name="file" />
+        <input type="submit" value="Subir" class="btn btn-primary" />
+    }
+    <h2>@ViewBag.Msg</h2>
+</section>
+

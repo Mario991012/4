@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab 4", "Lab 4\Lab 4.csproj", "{8E84ACCC-0FA2-4412-B60D-2340BC377901}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstructurasLineales", "EstructurasLineales\EstructurasLineales.csproj", "{4BAD009E-F1A9-4DCC-8EBD-A6B763060B0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8E84ACCC-0FA2-4412-B60D-2340BC377901}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E84ACCC-0FA2-4412-B60D-2340BC377901}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E84ACCC-0FA2-4412-B60D-2340BC377901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BAD009E-F1A9-4DCC-8EBD-A6B763060B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BAD009E-F1A9-4DCC-8EBD-A6B763060B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BAD009E-F1A9-4DCC-8EBD-A6B763060B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BAD009E-F1A9-4DCC-8EBD-A6B763060B0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
