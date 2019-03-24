@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Lab_4.Models.Med>
+
+@{
+    ViewBag.Title = "Agregar Medicamentos";
+}
+
+<h2>Buscando Medicamentos</h2>
+
+<h2>Opciones</h2>
+
+<p>
+    @Html.ActionLink("Facturar", "Create") | @Html.ActionLink("Ir a lista de Pedidos", "Index")
+</p>
+<hr />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Casa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Precio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Existencia)
+        </th>
+        <th>
+            <p>        Opciones         </p>
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Casa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Precio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Existencia)
+            </td>
+            <td>
+                @Html.ActionLink("Detalles", "Details", new { id = item.id }) |
+                @Html.ActionLink("Agregar", "Create", new { Name = item.Nombre })
+            </td>
+        </tr>
+    }
+
+</table>

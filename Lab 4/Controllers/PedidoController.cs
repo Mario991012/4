@@ -97,6 +97,7 @@ namespace Lab_4.Controllers
                     ViewBag.Error = "No hay cantidad necesaria.";
                 }
             }
+            Datos.Instancia.MedBuscados.Clear();
             return View(Datos.Instancia.ListaMed);
         }
 

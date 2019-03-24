@@ -5,7 +5,6 @@ using System.Web;
 using Lab_4.Models;
 using System.IO;
 using System.Windows;
-using Lab_4.Models;
 
 namespace Lab_4.Singleton
 {
@@ -34,8 +33,15 @@ namespace Lab_4.Singleton
 
         public List<Med> MedAVender = new List<Med>();
 
+        public List<Med> MedBuscados = new List<Med>();
+
         public double TotalPedido { get; set; }
 
+
+        public int Buscador(Med a, Med b)
+        {
+            return a.Nombre.CompareTo(b.Nombre);
+        }
 
         public void LecturaArchivo(string path)
         {

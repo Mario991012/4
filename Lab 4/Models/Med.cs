@@ -21,6 +21,10 @@ namespace Lab_4.Models
         [DisplayName("Existencias")]
         public int Existencia { get; set; }
 
+        
+
+        
+
         public int CompareTo(object obj)
         {
             var comparable = (Med)obj;
