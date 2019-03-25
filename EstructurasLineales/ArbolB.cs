@@ -58,17 +58,33 @@ namespace EstructurasLineales
         public int Comparador(NodoB<T> Nodo, T valor)
         {
             int NodoEncontrado = 0;
-            for (int i = 0; i < Nodo.cantidadDentro; i++)
+            if(Nodo.meds.Count <= 1)
             {
-                if(valor.CompareTo(Nodo.meds[i]) < 0)
+                if (valor.CompareTo(Nodo.meds[0]) < 0)
                 {
-                    NodoEncontrado = i;
-                }
-                else if(valor.CompareTo(Nodo.meds[i]) > 0 && valor.CompareTo(Nodo.meds[i + 1]) < 0)
+                    NodoEncontrado = 0;
+                }else
                 {
-                    NodoEncontrado = i + 1;
+                    NodoEncontrado = 1;
                 }
             }
+            else
+            {
+                for (int i = 0; i < Nodo.cantidadDentro; i++)
+                {
+                    if (valor.CompareTo(Nodo.meds[i]) < 0)
+                    {
+                        NodoEncontrado = i;
+                        break;
+                    }
+                    else if (valor.CompareTo(Nodo.meds[i]) > 0 && valor.CompareTo(Nodo.meds[i + 1]) < 0)
+                    {
+                        NodoEncontrado = i + 1;
+                        break;
+                    }
+                }
+            }
+            
 
             return NodoEncontrado;
         }

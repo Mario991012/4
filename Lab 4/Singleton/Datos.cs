@@ -156,6 +156,7 @@ namespace Lab_4.Singleton
                     //ArbolMed.AgregarNodoR(tmp);
                     //var nodo = new EstructurasLineales.NodoB<Med>(grado, tmp);
                     ArbolBMed.Agregar(tmp, ref raiz, grado);
+                    ArbolBMed.Raiz = raiz;
                 }
                 else { contador++; }
 
