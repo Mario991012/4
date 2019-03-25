@@ -29,6 +29,10 @@ namespace Lab_4.Singleton
 
         public EstructurasLineales.ArbolBinario<Med> ArbolMed = new EstructurasLineales.ArbolBinario<Med>();
 
+        public static EstructurasLineales.ArbolB<Med> ArbolBMed = new EstructurasLineales.ArbolB<Med>(5);
+
+        public EstructurasLineales.NodoB<Med> raiz = ArbolBMed.Raiz;
+
         public List<Med> MedEliminados = new List<Med>();
 
         public List<Med> MedAVender = new List<Med>();
@@ -43,7 +47,7 @@ namespace Lab_4.Singleton
             return a.Nombre.CompareTo(b.Nombre);
         }
 
-        public void LecturaArchivo(string path)
+        public void LecturaArchivo(string path, int grado)
         {
             string[] lineas = File.ReadAllLines(path);
             int contador = 0;
@@ -149,10 +153,11 @@ namespace Lab_4.Singleton
                     }
 
                     ListaMed.Add(tmp);
-                    ArbolMed.AgregarNodoR(tmp);
+                    //ArbolMed.AgregarNodoR(tmp);
+                    //var nodo = new EstructurasLineales.NodoB<Med>(grado, tmp);
+                    ArbolBMed.Agregar(tmp, ref raiz, grado);
                 }
                 else { contador++; }
-
 
             }
 

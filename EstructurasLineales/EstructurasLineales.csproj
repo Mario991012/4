@@ -45,6 +45,7 @@
     <Compile Include="ArbolBinario.cs" />
     <Compile Include="Interfaz.cs" />
     <Compile Include="Nodo.cs" />
+    <Compile Include="NodoB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

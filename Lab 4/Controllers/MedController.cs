@@ -11,8 +11,11 @@ namespace Lab_4.Controllers
 {
     public class MedController : Controller
     {
+        
+
         public ActionResult Index()
         {
+            
             Datos.Instancia.MedBuscados.Clear();
             return View(Datos.Instancia.ListaMed);
         }
@@ -22,18 +25,20 @@ namespace Lab_4.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Carga(FormCollection collection)
+        public ActionResult Carga(HttpPostedFileBase file, FormCollection collection)
         {
-            TempData["NumeroDeDatos"] = collection["nodo"];
+            int grado = int.Parse(collection["Grado"]);
+            Upload(file, grado);
             return RedirectToAction("Upload");
         }
-        public ActionResult Upload(HttpPostedFileBase file)
+        public ActionResult Upload(HttpPostedFileBase file, int grado)
         {
+            
             var model = Server.MapPath("~/uploads/") + file.FileName;
             if(file.ContentLength > 0)
             {
                 file.SaveAs(model);
-                Datos.Instancia.LecturaArchivo(model);
+                Datos.Instancia.LecturaArchivo(model, grado);
                 ViewBag.Msg = "";
                 return RedirectToAction("Index");
             }
