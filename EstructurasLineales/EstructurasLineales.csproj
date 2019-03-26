@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ArbolB.cs" />
     <Compile Include="ArbolBinario.cs" />
+    <Compile Include="Info.cs" />
     <Compile Include="Interfaz.cs" />
     <Compile Include="Nodo.cs" />
     <Compile Include="NodoB.cs" />

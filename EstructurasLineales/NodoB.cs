@@ -8,9 +8,11 @@ namespace EstructurasLineales
 {
     public class NodoB<T>
     {
+
         public bool EsRaiz { get; set; }
 
-        public List<T> meds { get; set; }
+        public List<Info> Meds { get; set; }
+
         public List<NodoB<T>> hijos { get; set; }
 
         public int cantidadDentro { get; set; }
@@ -20,19 +22,37 @@ namespace EstructurasLineales
         public int posicion { get; set; }
         public int max { get; set; }
         public int min { get; set; }
-
+        public T nombrebuscado { get; set; }
         
 
-        public NodoB(int grado)
+        public NodoB()
         {
             cantidadDentro = 0;
-            meds = new List<T>();
+            Meds = new List<Info>();
             hijos = new List<NodoB<T>>();
             Padre = null;
             posicion = 1;
             EsRaiz = false;
+            min = 0;
+            max = 0;
+
+        }
+
+        public void AsignandoGrado(int grado)
+        {
             max = (int)Math.Ceiling((double)grado - 1);
-            min = (int)Math.Ceiling((double)(grado-1)/2);
+            min = (int)Math.Ceiling((double)(grado - 1) / 2);
+        }
+
+        public int AsignandoPosicion(int posicion)
+        {
+            return posicion + 1;
+        }
+
+        public int CompareTo(object obj)
+        {
+            var comparable = (NodoB<T>)obj;
+            return Meds.First().Nombre.CompareTo(comparable.Meds.First().Nombre);
         }
 
     }

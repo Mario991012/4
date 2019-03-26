@@ -29,7 +29,7 @@ namespace Lab_4.Singleton
 
         public EstructurasLineales.ArbolBinario<Med> ArbolMed = new EstructurasLineales.ArbolBinario<Med>();
 
-        public static EstructurasLineales.ArbolB<Med> ArbolBMed = new EstructurasLineales.ArbolB<Med>(5);
+        public static EstructurasLineales.ArbolB<Med> ArbolBMed = new EstructurasLineales.ArbolB<Med>();
 
         public EstructurasLineales.NodoB<Med> raiz = ArbolBMed.Raiz;
 
@@ -42,16 +42,12 @@ namespace Lab_4.Singleton
         public double TotalPedido { get; set; }
 
 
-        public int Buscador(Med a, Med b)
-        {
-            return a.Nombre.CompareTo(b.Nombre);
-        }
-
         public void LecturaArchivo(string path, int grado)
         {
             string[] lineas = File.ReadAllLines(path);
             int contador = 0;
             char[] separadores = { ',' };
+            ArbolBMed.Raiz.AsignandoGrado(grado);
 
             foreach (var linea in lineas)
             {
@@ -153,9 +149,7 @@ namespace Lab_4.Singleton
                     }
 
                     ListaMed.Add(tmp);
-                    //ArbolMed.AgregarNodoR(tmp);
-                    //var nodo = new EstructurasLineales.NodoB<Med>(grado, tmp);
-                    ArbolBMed.Agregar(tmp, ref raiz, grado);
+                    ArbolBMed.Agregar(tmp.Nombre, tmp.id, ref raiz);
                     ArbolBMed.Raiz = raiz;
                 }
                 else { contador++; }

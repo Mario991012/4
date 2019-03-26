@@ -12,10 +12,10 @@ namespace Lab_4.Controllers
     public class MedController : Controller
     {
         
+        public int grado { get; set; }
 
         public ActionResult Index()
         {
-            
             Datos.Instancia.MedBuscados.Clear();
             return View(Datos.Instancia.ListaMed);
         }
@@ -27,13 +27,12 @@ namespace Lab_4.Controllers
         [HttpPost]
         public ActionResult Carga(HttpPostedFileBase file, FormCollection collection)
         {
-            int grado = int.Parse(collection["Grado"]);
+            grado = int.Parse(collection["Grado"]);
             Upload(file, grado);
             return RedirectToAction("Upload");
         }
         public ActionResult Upload(HttpPostedFileBase file, int grado)
         {
-            
             var model = Server.MapPath("~/uploads/") + file.FileName;
             if(file.ContentLength > 0)
             {
@@ -65,7 +64,7 @@ namespace Lab_4.Controllers
         public ActionResult Create(string Name)
         {
             PedidoController pedido = new PedidoController();
-            pedido.AgregarMed(Name);
+            pedido.AgregarMed(Name, grado);
             
             return RedirectToAction("AgregarMed", "Pedido");
         }

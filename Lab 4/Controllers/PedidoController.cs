@@ -72,8 +72,11 @@ namespace Lab_4.Controllers
             }
         }  
 
-        public ActionResult AgregarMed(string Name)
+        public ActionResult AgregarMed(string Name, int grado)
         {
+
+
+
             foreach (var item in Datos.Instancia.ListaMed)
             {
 
