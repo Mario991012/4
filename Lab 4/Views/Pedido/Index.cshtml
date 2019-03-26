@@ -4,6 +4,16 @@
     ViewBag.Title = "Index";
 }
 
+<section>
+    <h3>Buscar Medicamento</h3>
+
+    @using (Html.BeginForm("Buscar", "Med", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="text" name="Buscado" />
+        <input type="submit" value="Buscar" class="btn btn-primary" />
+    }
+</section>
+
 <h2>Lista de Pedidos</h2>
 
 <p>

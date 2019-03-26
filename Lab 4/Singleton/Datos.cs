@@ -5,7 +5,6 @@ using System.Web;
 using Lab_4.Models;
 using System.IO;
 using System.Windows;
-using Lab_4.Models;
 
 namespace Lab_4.Singleton
 {
@@ -30,18 +29,25 @@ namespace Lab_4.Singleton
 
         public EstructurasLineales.ArbolBinario<Med> ArbolMed = new EstructurasLineales.ArbolBinario<Med>();
 
+        public static EstructurasLineales.ArbolB<Med> ArbolBMed = new EstructurasLineales.ArbolB<Med>();
+
+        public EstructurasLineales.NodoB<Med> raiz = ArbolBMed.Raiz;
+
         public List<Med> MedEliminados = new List<Med>();
 
         public List<Med> MedAVender = new List<Med>();
 
+        public List<Med> MedBuscados = new List<Med>();
+
         public double TotalPedido { get; set; }
 
 
-        public void LecturaArchivo(string path)
+        public void LecturaArchivo(string path, int grado)
         {
             string[] lineas = File.ReadAllLines(path);
             int contador = 0;
             char[] separadores = { ',' };
+            ArbolBMed.Raiz.AsignandoGrado(grado);
 
             foreach (var linea in lineas)
             {
@@ -143,10 +149,10 @@ namespace Lab_4.Singleton
                     }
 
                     ListaMed.Add(tmp);
-                    ArbolMed.AgregarNodoR(tmp);
+                    ArbolBMed.Agregar(tmp.Nombre, tmp.id, ref raiz);
+                    ArbolBMed.Raiz = raiz;
                 }
                 else { contador++; }
-
 
             }
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstructurasLineales
 {
-    public class ArbolBinario<T> : Interfaz<T>, IEnumerable<T> where T : IComparable
+    public class ArbolBinario<T> : IEnumerable<T> where T : IComparable
     {
         public Nodo<T> RaizAux { get; set; }//Para formar el arbol
         public ArbolBinario() { RaizAux = null; }//Metodo constructor
@@ -30,8 +30,7 @@ namespace EstructurasLineales
 
         public void AgregarHojas(Nodo<T> Raiz, Nodo<T> hijo, T hojaV)//La raiz
         {
-            //int comparar = hijo.valor.CompareTo(Raiz.valor);
-            if ((int)MyDelegate.DynamicInvoke(Raiz, hijo) < 0)//Verifico si va hacia la derecha
+            if (MyDelegate(Raiz, hijo) < 0)//Verifico si va hacia la derecha
             {
                 if (Raiz.Derecha == null) //Si el lado derecho esta vacio
                 {
@@ -46,7 +45,7 @@ namespace EstructurasLineales
                     AgregarHojas(Raiz.Derecha, hijo, hojaV);
                 }
             }
-            else if ((int)MyDelegate.DynamicInvoke(Raiz, hijo) > 0)//Verifico si va hacia la izquierda
+            else if (MyDelegate(Raiz, hijo) > 0)//Verifico si va hacia la izquierda
             {
                 if (Raiz.Izquierda == null) //Si el lado izquierdo esta vacio
                 {
@@ -66,22 +65,22 @@ namespace EstructurasLineales
             //}
         }      
 
-        public int CrearNodo(T valor) //METODO A LLAMAR CUANDO SE BUSQUE UN FARMACO
+        public T CrearNodo(T valor) //METODO A LLAMAR CUANDO SE BUSQUE UN FARMACO
         {
             var Nodo = new Nodo<T>(valor);
             return BuscadorNodo(RaizAux, Nodo);
         }
 
-        public int  BuscadorNodo(Nodo<T>Raiz, Nodo<T>nodo)
+        public T BuscadorNodo(Nodo<T>Raiz, Nodo<T>nodo)
         {
-            if (Raiz == null) { return 0; }// si el arbol esta vacio o no se encontro
+            if (Raiz == null) { return nodo.valor; }// si el arbol esta vacio o no se encontro
 
-            else if (Raiz.valor.CompareTo(nodo.valor) == 0) { return nodo.posicion; }//Si el valor se encuentra en la raiz
+            else if (nodo.valor.CompareTo(Raiz.valor) == 0) { return Raiz.valor; }//Si el valor se encuentra en la raiz
 
-            else if ((int)MyDelegate.DynamicInvoke(Raiz.valor, nodo.valor) > 0) { return BuscadorNodo(Raiz.Izquierda, nodo); }//Si es menor el dato, se vuelve a llamar
+            else if (Raiz.valor.CompareTo(nodo.valor) > 0) { return BuscadorNodo(Raiz.Izquierda, nodo); }//Si es menor el dato, se vuelve a llamar
             else { return BuscadorNodo(Raiz.Derecha, nodo); }//Si es mayor el dato, se vuelve a llamar
 
-            //ESTE METODO RETORNA 0 OR  n... ENTONCES, CUANDO LO LLAMEMOS EN EL CONTROLADOR, DEBEMOS DE PONER ANTES UN CONDICIONAL PARA QUE FUNCIONE
+            //ESTE METODO RETORNA 0 O  n... ENTONCES, CUANDO LO LLAMEMOS EN EL CONTROLADOR, DEBEMOS DE PONER ANTES UN CONDICIONAL PARA QUE FUNCIONE
         }
 
         public void BuscarNodoAEliminar(Nodo<T>arbol, Nodo<T>eliminado)//Envio la raiz y el nodo a eliminar
@@ -176,9 +175,9 @@ namespace EstructurasLineales
         };
 
         //Creacion del delegado
-        public delegate int Delegado(Nodo<T> n1, Nodo<T> n2);
+        public delegate int Buscador(Nodo<T> n1, Nodo<T> n2);
 
         //Instancia del tipo delegado y referencia al metodo
-        Delegado MyDelegate = new Delegado(CompareByName);
+        Buscador MyDelegate = new Buscador(CompareByName);
     }
 }

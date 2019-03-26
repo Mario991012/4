@@ -72,8 +72,11 @@ namespace Lab_4.Controllers
             }
         }  
 
-        public ActionResult AgregarMed(string Name)
+        public ActionResult AgregarMed(string Name, int grado)
         {
+
+
+
             foreach (var item in Datos.Instancia.ListaMed)
             {
 
@@ -97,6 +100,7 @@ namespace Lab_4.Controllers
                     ViewBag.Error = "No hay cantidad necesaria.";
                 }
             }
+            Datos.Instancia.MedBuscados.Clear();
             return View(Datos.Instancia.ListaMed);
         }
 
