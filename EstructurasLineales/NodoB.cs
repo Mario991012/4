@@ -18,39 +18,45 @@ namespace EstructurasLineales
         public int max { get; set; }
         public int min { get; set; }
         public int cantidadDentro { get; set; }
-        public int SigPosicion { get; set; }
 
-        //public static int buffer = 0;
+        public static int buffer = 0;
 
-        //public string ToFixedLenghtString()
-        //{
-            
-        //    string hijos = "", Meds = "";
-        //    foreach (var items in Hijos)
-        //    {
-        //        buffer += 9;
-        //        hijos += $"{items.ToString("00000;-0000")}|";
-        //    }
-        //    foreach (var items in meds)
-        //    {
-        //        buffer += 19;
-        //        Meds += $"{Hijos[0].ToString("00000;-0000")}|{Hijos[1].ToString("00000;-0000")}|";
-        //    }
-        //    buffer += 20;
-        //    return $"{id.ToString("00000;-0000")}|{padre.ToString("00000;-0000")}|" + hijos + Meds;
-        //}
+        public string ToFixedLenghtString(NodoB<T> NodoAConvertir)
+        {
 
-        //public int FixedSizeText
-        //{
-        //    get { return FixedSize; }
-        //}
+            string hijos = "", Meds = "";
+            for(int i = 0; i < NodoAConvertir.max; i++)
+            {
+                if(i < NodoAConvertir.cantidadDentro  && NodoAConvertir.Hijos.Count > 0)
+                {
+                    buffer += 4;
+                    hijos += $"{string.Format("{0,5}", NodoAConvertir.Hijos[i])}|";
+                }
+                else
+                {
+                    hijos += "-----|";
+                }
+            }
 
-        //public static int FixedSize { get { return buffer; } }
+            foreach (var items in NodoAConvertir.meds)
+            {
+                buffer += 49;
+                Meds += $"{string.Format("{0,100}", items)}|";
+            }
+            buffer += 20;
+            return $"{id.ToString("00000;-0000")}|{padre.ToString("00000;-0000")}|" + hijos + Meds;
+        }
+
+        public int FixedSizeText
+        {
+            get { return FixedSize; }
+        }
+
+        public static int FixedSize { get { return buffer; } }
 
         public NodoB()
         {
             id = 1;
-            SigPosicion = id + 1;
             padre = 0;
             Hijos = new List<int>();
             meds = new List<string>();
