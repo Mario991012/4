@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Lab_4.Models;
 using Lab_4.Singleton;
+using Newtonsoft.Json;
 
 namespace Lab_4.Controllers
 {
@@ -34,10 +35,17 @@ namespace Lab_4.Controllers
         public ActionResult Upload(HttpPostedFileBase file, int grado)
         {
             var model = Server.MapPath("~/uploads/") + file.FileName;
-            if(file.ContentLength > 0)
+            var informacion = Server.MapPath("~/uploads/Nodos.txt");
+
+            using (StreamWriter nodos = new StreamWriter(informacion))
+            {
+                nodos.WriteLine(grado);
+            }
+
+            if (file.ContentLength > 0)
             {
                 file.SaveAs(model);
-                Datos.Instancia.LecturaArchivo(model, grado);
+                Datos.Instancia.LecturaArchivo(model, informacion, grado);
                 ViewBag.Msg = "";
                 return RedirectToAction("Index");
             }
@@ -45,7 +53,7 @@ namespace Lab_4.Controllers
             {
                 ViewBag.Msg = "ERROR";
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index"); 
         }
 
         public ActionResult Details(int id)
@@ -94,27 +102,35 @@ namespace Lab_4.Controllers
         [HttpPost]
         public ActionResult Buscar(FormCollection collection)
         {
-            Med agregado = new Med();
-            agregado.Nombre = collection["Buscado"];
-
-            Med medEncontrado = Datos.Instancia.ArbolMed.CrearNodo(agregado);
-            int posicion = medEncontrado.id;
-            if (posicion == -1)
+            if(collection["Buscado"] == "" || collection["Buscado"] == null)
             {
-                ViewBag.Error = "No se encontró";
+                return View("Index");
             }
             else
             {
-                foreach(var item in Datos.Instancia.ListaMed)
+                Med agregado = new Med();
+                agregado.Nombre = collection["Buscado"];
+
+                Med medEncontrado = Datos.Instancia.ArbolMed.CrearNodo(agregado);
+                int posicion = medEncontrado.id;
+                if (posicion == -1)
                 {
-                    if(posicion == item.id)
+                    ViewBag.Error = "No se encontró";
+                }
+                else
+                {
+                    foreach (var item in Datos.Instancia.ListaMed)
                     {
-                        Datos.Instancia.MedBuscados.Add(item);
-                        break;
+                        if (posicion == item.id)
+                        {
+                            Datos.Instancia.MedBuscados.Add(item);
+                            break;
+                        }
                     }
                 }
+                return View(Datos.Instancia.MedBuscados);
             }
-            return View(Datos.Instancia.MedBuscados);
+            
         }
 
     }

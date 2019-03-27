@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,33 +7,56 @@ using System.Threading.Tasks;
 
 namespace EstructurasLineales
 {
-    public class NodoB<T>
+    public class NodoB<T> : IEnumerable, IComparable
     {
 
-        public bool EsRaiz { get; set; }
+        public int id { get; set; }
+        public int padre { get; set; }
+        public List<int> Hijos { get; set; }
+        public List<string> meds { get; set; }
 
-        public List<Info> Meds { get; set; }
-
-        public List<NodoB<T>> hijos { get; set; }
-
-        public int cantidadDentro { get; set; }
-        
-        public NodoB<T> Padre { get; set; }
-
-        public int posicion { get; set; }
         public int max { get; set; }
         public int min { get; set; }
-        public T nombrebuscado { get; set; }
-        
+        public int cantidadDentro { get; set; }
+        public int SigPosicion { get; set; }
+
+        //public static int buffer = 0;
+
+        //public string ToFixedLenghtString()
+        //{
+            
+        //    string hijos = "", Meds = "";
+        //    foreach (var items in Hijos)
+        //    {
+        //        buffer += 9;
+        //        hijos += $"{items.ToString("00000;-0000")}|";
+        //    }
+        //    foreach (var items in meds)
+        //    {
+        //        buffer += 19;
+        //        Meds += $"{Hijos[0].ToString("00000;-0000")}|{Hijos[1].ToString("00000;-0000")}|";
+        //    }
+        //    buffer += 20;
+        //    return $"{id.ToString("00000;-0000")}|{padre.ToString("00000;-0000")}|" + hijos + Meds;
+        //}
+
+        //public int FixedSizeText
+        //{
+        //    get { return FixedSize; }
+        //}
+
+        //public static int FixedSize { get { return buffer; } }
 
         public NodoB()
         {
+            id = 1;
+            SigPosicion = id + 1;
+            padre = 0;
+            Hijos = new List<int>();
+            meds = new List<string>();
+
+
             cantidadDentro = 0;
-            Meds = new List<Info>();
-            hijos = new List<NodoB<T>>();
-            Padre = null;
-            posicion = 1;
-            EsRaiz = false;
             min = 0;
             max = 0;
 
@@ -44,16 +68,48 @@ namespace EstructurasLineales
             min = (int)Math.Ceiling((double)(grado - 1) / 2);
         }
 
-        public int AsignandoPosicion(int posicion)
+        public int AsignandoID(int id)
         {
-            return posicion + 1;
+            return id + 1;
         }
+
 
         public int CompareTo(object obj)
         {
             var comparable = (NodoB<T>)obj;
-            return Meds.First().Nombre.CompareTo(comparable.Meds.First().Nombre);
+            return meds.First().CompareTo(comparable.meds.First());
         }
 
+        public IEnumerator GetEnumerator()
+        {
+            bool[] recorridos = new bool[4] { false, false, false, false };
+
+            if (recorridos[0] == false)
+            {
+                recorridos[0] = true;
+                yield return id;
+            }
+            else if (recorridos[1] == false)
+            {
+                recorridos[1] = true;
+                yield return padre;
+            }
+            else if (recorridos[2] == false)
+            {
+                recorridos[2] = true;
+                yield return Hijos;
+            }
+            else if (recorridos[3] == false)
+            {
+                recorridos[3] = true;
+                yield return meds;
+            }
+
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

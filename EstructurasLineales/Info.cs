@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EstructurasLineales
 {
-    public class Info
+    public class Info : IComparable
     {
         public string Nombre { get; set; }
         public int id { get; set; }
@@ -17,10 +17,18 @@ namespace EstructurasLineales
             id = 0;
         }
 
+
+
+
         public int CompareTo(object obj)
         {
             var comparable = (Info)obj;
             return Nombre.CompareTo(comparable.Nombre);
+        }
+
+        public string ToFixedLenghtString()
+        {
+            throw new NotImplementedException();
         }
     }
 }

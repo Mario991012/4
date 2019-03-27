@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
+using System.Collections;
+using Newtonsoft.Json;
 
 namespace EstructurasLineales
 {
 
-    public class ArbolB<T>: IEnumerable<T> where T: IComparable
+    public class ArbolB<T>
     {
 
         public NodoB<T> Raiz { get; set; }
@@ -19,22 +20,111 @@ namespace EstructurasLineales
         }
 
 
-        public bool NodoVacio(NodoB<T> Nodo)
+        public void Escritura(NodoB<T> Nodo, string ubicacion)
         {
-            if(Nodo.Meds.Count == 0)
+            
+            string hijos = "";
+            string meds = "";
+            for (int i = 0; i < Nodo.max; i++)
             {
-                return true;
+                if (i < Nodo.cantidadDentro)
+                {
+                    if (Nodo.Hijos.Count == 0)
+                    {
+                        hijos = "-#";
+                    }
+                    else
+                    {
+                        hijos += Nodo.Hijos[i];
+                    }
+                    meds = Nodo.meds[i] + "#";
+                }
+                else
+                {
+                    hijos += "-#";
+                    meds += "-#";
+                }
             }
-            else
+            using (StreamWriter fs = File.AppendText(ubicacion))
             {
-                return false;
+                fs.WriteLine($"#{Nodo.id.ToString()}#{Nodo.padre.ToString()}#{hijos}{meds}|");
             }
+
+
+
+
+            
         }
+
+
+
+
+
+        //string[] lineas = File.ReadAllLines(ubicacion);
+        //foreach (var linea in lineas)
+        //{
+        //    if (linea[1] == Nodo.id)
+        //    {
+        //        using (StreamWriter nodos = new StreamWriter(ubicacion))
+        //        {
+        //            nodos.WriteLine("|{0}|{1}|{2}{3}", Nodo.id.ToString(), Nodo.padre.ToString(), hijos, meds);
+        //        }
+        //    }
+        //}
+
+        //using (var fs = new FileStream(ubicacion, FileMode.OpenOrCreate))
+        //{
+        //    foreach (var item in Nodo)
+        //    {
+        //        fs.Write(ByteGenerator.ConvertToBytes(item.ToFixedLenghtString()), 0, NodoB<T>.FixedSize);
+        //    }
+        //}
+
+
+
+        //string NodoNuevo = JsonConvert.SerializeObject(Nodo);
+        //string hijos = "";
+        //string meds = "";
+        //for(int i = 0; i < Nodo.max; i++)
+        //{
+        //    if(i < Nodo.cantidadDentro)
+        //    {
+        //        if(Nodo.Hijos.Count == 0)
+        //        {
+        //            hijos = "-|";
+        //        }
+        //        else
+        //        {
+        //            hijos += Nodo.Hijos[i];
+        //        }
+        //        meds = Nodo.meds[i] + "|";
+        //    }
+        //    else
+        //    {
+        //        hijos += "-|";
+        //        meds += "-|";
+        //    }
+        //}
+
+        //using (StreamWriter nodos = File.AppendText(ubicacion))
+        //{
+        //    nodos.WriteLine("|{0}|{1}|{2}{3}", Nodo.id.ToString(), Nodo.padre.ToString(), hijos, meds);
+        //    nodos.WriteLine(NodoNuevo);
+        //}
+
+
+        public void Lectura(string ubicacion)
+        {
+            
+
+        }
+
+
 
         public bool HayNodosHijo(NodoB<T> Nodo)
         {
             
-            if(Nodo.hijos.Count == 0)
+            if(Nodo.Hijos.Count == 0)
             {
                 return false;
             }
@@ -58,161 +148,149 @@ namespace EstructurasLineales
             
         }
 
-        public int Comparador(NodoB<T> Nodo, string nombre)
-        {
-            int NodoEncontrado = Nodo.cantidadDentro;
-            if(Nodo.Meds.Count <= 1)
-            {
-                if (nombre.CompareTo(Nodo.Meds[0].Nombre) < 0)
-                {
-                    NodoEncontrado = 0;
-                }else
-                {
-                    NodoEncontrado = 1;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < Nodo.cantidadDentro -1; i++)
-                {
-                    if (nombre.CompareTo(Nodo.Meds[i].Nombre) < 0)
-                    {
-                        NodoEncontrado = i;
-                        break;
-                    }
-                    else if (nombre.CompareTo(Nodo.Meds[i].Nombre) > 0 && nombre.CompareTo(Nodo.Meds[i + 1].Nombre) < 0)
-                    {
-                        NodoEncontrado = i + 1;
-                        break;
-                    }
-                }
-            }
+        //public int Comparador(NodoB<T> Nodo, string nombre)
+        //{
+        //    int NodoEncontrado = Nodo.cantidadDentro;
+        //    if(Nodo.Meds.Count <= 1)
+        //    {
+        //        if (nombre.CompareTo(Nodo.Meds[0].Nombre) < 0)
+        //        {
+        //            NodoEncontrado = 0;
+        //        }else
+        //        {
+        //            NodoEncontrado = 1;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        for (int i = 0; i < Nodo.cantidadDentro -1; i++)
+        //        {
+        //            if (nombre.CompareTo(Nodo.Meds[i].Nombre) < 0)
+        //            {
+        //                NodoEncontrado = i;
+        //                break;
+        //            }
+        //            else if (nombre.CompareTo(Nodo.Meds[i].Nombre) > 0 && nombre.CompareTo(Nodo.Meds[i + 1].Nombre) < 0)
+        //            {
+        //                NodoEncontrado = i + 1;
+        //                break;
+        //            }
+        //        }
+        //    }
             
 
-            return NodoEncontrado;
-        }
+        //    return NodoEncontrado;
+        //}
 
-        public void Separar(ref NodoB<T> Nodo)
+        public void Separar(NodoB<T> Nodo, string ubicaciontxt)
         {
-            var NuevoNodoPadre = new NodoB<T>();
-            NuevoNodoPadre.AsignandoGrado(Nodo.max + 1);
-            var NuevoNodoIzq = new NodoB<T>();
-            NuevoNodoIzq.AsignandoGrado(Nodo.max + 1);
             var NuevoNodoDer = new NodoB<T>();
             NuevoNodoDer.AsignandoGrado(Nodo.max + 1);
+            NuevoNodoDer.id = Nodo.id + 1;
 
-            for (int i = 0; i < (Nodo.max / 2); i++)
-            {
-                NuevoNodoIzq.Meds.Add(Nodo.Meds[i]);
-                NuevoNodoIzq.cantidadDentro++;
-            }
             for (int i = (Nodo.max / 2) + 1; i <= Nodo.max; i++)
             {
-                NuevoNodoDer.Meds.Add(Nodo.Meds[i]);
+                NuevoNodoDer.meds.Add(Nodo.meds[i]);
                 NuevoNodoDer.cantidadDentro++;
             }
 
-            if(Nodo.Padre == null)
-            {
-                NuevoNodoPadre.Meds.Add(Nodo.Meds[(Nodo.max / 2)]);
-                Nodo = NuevoNodoPadre;
-                NuevoNodoIzq.Padre = Nodo;
-                NuevoNodoDer.Padre = Nodo;
-                Nodo.hijos.Add(NuevoNodoIzq);
-                Nodo.hijos.Add(NuevoNodoDer);
-                NuevoNodoIzq.posicion = NuevoNodoIzq.AsignandoPosicion(Nodo.posicion);
-                NuevoNodoDer.posicion = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.posicion);
-                Nodo.EsRaiz = true;
-                Nodo.cantidadDentro = NuevoNodoPadre.Meds.Count();
-                Nodo.hijos.Sort((x, y) => x.CompareTo(y));
-                //////////////////////////////////////////
-                //NuevoNodoIzq.Padre = NuevoNodoPadre;
-                //NuevoNodoDer.Padre = NuevoNodoPadre;
+            var NuevoNodoPadre = new NodoB<T>();
+            NuevoNodoPadre.AsignandoGrado(Nodo.max + 1);
+            NuevoNodoPadre.id = NuevoNodoDer.id + 1;
+            NuevoNodoPadre.meds.Add(Nodo.meds[Nodo.max / 2]);
 
-                //NuevoNodoPadre.Padre = Nodo.Padre;
 
-                //NuevoNodoPadre.hijos.Add(NuevoNodoIzq);
-                //NuevoNodoPadre.hijos.Add(NuevoNodoDer);
 
-                //NuevoNodoIzq.posicion = NuevoNodoIzq.AsignandoPosicion(Nodo.posicion);
-                //NuevoNodoDer.posicion = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.posicion);
+            Escritura(Nodo, ubicaciontxt);
+            Escritura(NuevoNodoDer, ubicaciontxt);
+            Escritura(NuevoNodoPadre, ubicaciontxt);
 
-                //Nodo = NuevoNodoPadre;
-                //Nodo.EsRaiz = true;
 
-                //Nodo.cantidadDentro = NuevoNodoPadre.Meds.Count();
-                //Nodo.hijos.Sort((x, y) => x.CompareTo(y));
-            }
-            else if(Nodo.Padre != null)
-            {
-                Nodo.Padre.hijos.Add(NuevoNodoIzq);
-                Nodo.Padre.hijos.Add(NuevoNodoDer);
-                Nodo.Padre.hijos.Remove(Nodo);
+            //if (Nodo.padre != 0)
+            //{
+            //    NuevoNodoPadre.Meds.Add(Nodo.Meds[(Nodo.max / 2)]);
+            //    Nodo = NuevoNodoPadre;
+            //    NuevoNodoIzq.Padre = Nodo;
+            //    NuevoNodoDer.Padre = Nodo;
+            //    Nodo.hijos.Add(NuevoNodoIzq);
+            //    Nodo.hijos.Add(NuevoNodoDer);
+            //    NuevoNodoIzq.posicion = NuevoNodoIzq.AsignandoPosicion(Nodo.posicion);
+            //    NuevoNodoDer.posicion = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.posicion);
+            //    Nodo.EsRaiz = true;
+            //    Nodo.cantidadDentro = NuevoNodoPadre.Meds.Count();
+            //    Nodo.hijos.Sort((x, y) => x.CompareTo(y));
+            //}
+            //else if (Nodo.Padre != null)
+            //{
+            //    Nodo.Padre.hijos.Add(NuevoNodoIzq);
+            //    Nodo.Padre.hijos.Add(NuevoNodoDer);
+            //    Nodo.Padre.hijos.Remove(Nodo);
 
-                Nodo.Padre.Meds.Add(Nodo.Meds[(Nodo.max / 2)]);
+            //    Nodo.Padre.Meds.Add(Nodo.Meds[(Nodo.max / 2)]);
 
-                Nodo.Padre.Meds.Sort((x, y) => x.CompareTo(y));
-                
-                Nodo.Padre.cantidadDentro = Nodo.Padre.Meds.Count();
+            //    Nodo.Padre.Meds.Sort((x, y) => x.CompareTo(y));
 
-                NuevoNodoIzq.posicion = NuevoNodoIzq.AsignandoPosicion(Nodo.posicion);
-                NuevoNodoDer.posicion = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.posicion);
+            //    Nodo.Padre.cantidadDentro = Nodo.Padre.Meds.Count();
 
-                Nodo = Nodo.Padre;
-                Nodo.EsRaiz = true;
+            //    NuevoNodoIzq.posicion = NuevoNodoIzq.AsignandoPosicion(Nodo.posicion);
+            //    NuevoNodoDer.posicion = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.posicion);
 
-                NuevoNodoIzq.Padre = NuevoNodoDer.Padre = Nodo;
-                Nodo.hijos.Sort((x, y) => x.CompareTo(y));
-            }
-            
+            //    Nodo = Nodo.Padre;
+            //    Nodo.EsRaiz = true;
 
-            if (Nodo.cantidadDentro > Nodo.max)
-            {
-                var nodo = Nodo;
-                Separar(ref nodo);
-                Nodo = nodo;
-            }
+            //    NuevoNodoIzq.Padre = NuevoNodoDer.Padre = Nodo;
+            //    Nodo.hijos.Sort((x, y) => x.CompareTo(y));
+            //}
+
+
+            //if (Nodo.cantidadDentro > Nodo.max)
+            //{
+            //    var nodo = Nodo;
+            //    Separar(nodo);
+            //    Nodo = nodo;
+            //}
         }
 
-        public void Agregar(string nombre, int id, ref NodoB<T> Nodo)
+        public void Agregar(string ubicaciontxt, string nombre, int id, ref NodoB<T> Nodo)
         {
-            if (NodoVacio(Nodo) == true)
+
+            if (ExisteEspacio(Nodo) == true && HayNodosHijo(Nodo) == false)
             {
-                AgregarYOrdenarANodo(nombre, id, Nodo);
+                Nodo.meds.Add(nombre);
+                Nodo.cantidadDentro++;
+                Escritura(Nodo, ubicaciontxt);
             }
-            else if(ExisteEspacio(Nodo) == true && HayNodosHijo(Nodo) == false)
-            {
-                AgregarYOrdenarANodo(nombre, id, Nodo);
-            }
-            else if (ExisteEspacio(Nodo) == true && HayNodosHijo(Nodo) == true)
-            {
-                Nodo.EsRaiz = true;
-                var nodo = new NodoB<T>();
-                nodo = Nodo.hijos[Comparador(Nodo, nombre)];
-                nodo.posicion = nodo.AsignandoPosicion(Nodo.posicion);
-                Agregar(nombre, id, ref nodo);
-            }
+            //else if (ExisteEspacio(Nodo) == true && HayNodosHijo(Nodo) == true)
+            //{
+            //    var nodo = new NodoB<T>();
+            //    nodo = Nodo.hijos[Comparador(Nodo, nombre)];
+            //    nodo.posicion = nodo.AsignandoPosicion(Nodo.posicion);
+            //    Agregar(ubicaciontxt, nombre, id, ref nodo);
+            //}
+
+            
 
             if (ExisteEspacio(Nodo) == false)
             {
-                Separar(ref Nodo);
+                
+                Separar(Nodo, ubicaciontxt);
             }
         }
 
 
         //agrega el med al nodo actual
-        public void AgregarYOrdenarANodo(string nombre, int id, NodoB<T> Nodo)
-        {
-            Info info = new Info();
-            info.Nombre = nombre;
-            info.id = id;
+        //public void AgregarYOrdenarANodo(string nombre, int id, NodoB<T> Nodo)
+        //{
+        //    Info info = new Info();
+        //    info.Nombre = nombre;
+        //    info.id = id;
 
-            Nodo.Meds.Add(info);
+        //    Nodo.Meds.Add(info);
 
-            Nodo.Meds.Sort((x,y) => x.CompareTo(y));
+        //    Nodo.Meds.Sort((x,y) => x.CompareTo(y));
 
-            Nodo.cantidadDentro++;
-        }
+        //    Nodo.cantidadDentro++;
+        //}
 
 
         public bool ExisteUnderFlow(NodoB<T> Nodo)
@@ -222,17 +300,6 @@ namespace EstructurasLineales
             else
             { return false; }
         }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
 
     }
 }
