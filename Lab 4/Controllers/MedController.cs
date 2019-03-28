@@ -11,8 +11,8 @@ namespace Lab_4.Controllers
 {
     public class MedController : Controller
     {
-        
-        public int grado { get; set; }
+
+        public static int Grado = 5;
 
         public ActionResult Index()
         {
@@ -27,19 +27,20 @@ namespace Lab_4.Controllers
         [HttpPost]
         public ActionResult Carga(HttpPostedFileBase file, FormCollection collection)
         {
-            grado = int.Parse(collection["Grado"]);
-            Upload(file, grado);
+            Grado = int.Parse(collection["Grado"]);
+            Upload(file, Grado);
             return RedirectToAction("Upload");
         }
         public ActionResult Upload(HttpPostedFileBase file, int grado)
         {
+            var informacion = Server.MapPath("~/uploads/Nodos.txt");
+
             var model = Server.MapPath("~/uploads/") + file.FileName;
             if(file.ContentLength > 0)
             {
                 file.SaveAs(model);
-                Datos.Instancia.LecturaArchivo(model, grado);
+                Datos.Instancia.LecturaArchivo(model, grado, informacion);
                 ViewBag.Msg = "";
-                return RedirectToAction("Index");
             }
             else
             {
@@ -50,22 +51,20 @@ namespace Lab_4.Controllers
 
         public ActionResult Details(int id)
         {
-            foreach (var item in Datos.Instancia.ListaMed)
-            {
-                if (item.id == id)
-                {
-                    return View(item);
-                }
-            }
-            return View();
+            return View(Datos.Instancia.ListaMed[id]);
         }
 
         // GET: Med/Create
-        public ActionResult Create(string Name)
+        public ActionResult Create()
+        {   
+            return RedirectToAction("AgregarMed", "Pedido");
+        }
+
+        [HttpGet]
+        public ActionResult AgregarMed()
         {
             PedidoController pedido = new PedidoController();
-            pedido.AgregarMed(Name, grado);
-            
+            pedido.AgregarMed(100);
             return RedirectToAction("AgregarMed", "Pedido");
         }
 
@@ -94,25 +93,17 @@ namespace Lab_4.Controllers
         [HttpPost]
         public ActionResult Buscar(FormCollection collection)
         {
-            Med agregado = new Med();
-            agregado.Nombre = collection["Buscado"];
+            string NombreBuscado = collection["Buscado"];
 
-            Med medEncontrado = Datos.Instancia.ArbolMed.CrearNodo(agregado);
-            int posicion = medEncontrado.id;
-            if (posicion == -1)
+            int id = Datos.Instancia.ArbolBMed.Buscador(NombreBuscado, Datos.Instancia.ArbolBMed.Raiz);
+
+            if (id == -1)
             {
                 ViewBag.Error = "No se encontró";
             }
             else
             {
-                foreach(var item in Datos.Instancia.ListaMed)
-                {
-                    if(posicion == item.id)
-                    {
-                        Datos.Instancia.MedBuscados.Add(item);
-                        break;
-                    }
-                }
+                Datos.Instancia.MedBuscados.Add(Datos.Instancia.ListaMed[id]);
             }
             return View(Datos.Instancia.MedBuscados);
         }

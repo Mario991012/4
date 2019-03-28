@@ -10,6 +10,7 @@ namespace Lab_4.Controllers
 {
     public class PedidoController : Controller
     {
+        public static int Grado = 5;
         // GET: Pedido
         public ActionResult Index()
         {
@@ -72,34 +73,23 @@ namespace Lab_4.Controllers
             }
         }  
 
-        public ActionResult AgregarMed(string Name, int grado)
+
+
+        [HttpPost]
+        public ActionResult AgregarMed(int id)
         {
-
-
-
-            foreach (var item in Datos.Instancia.ListaMed)
+            if(Datos.Instancia.ListaMed[id].Existencia > 0)
             {
+                Datos.Instancia.ListaMed[id].Existencia--;
 
-                if (item.Nombre == Name && item.Existencia > 0)
-                {
-                    item.Existencia--;
-                    Med medAgregar = new Med();
-                    medAgregar.Nombre = item.Nombre;
-                    medAgregar.id = item.id;
-                    medAgregar.Precio = item.Precio;
-                    medAgregar.Descripcion = item.Descripcion;
-                    medAgregar.Casa = item.Casa;
-                    medAgregar.Existencia = item.Existencia;
-                    Datos.Instancia.TotalPedido += medAgregar.Precio;
-                    Datos.Instancia.MedAVender.Add(medAgregar);
-                }
-                else if(item.Existencia <= 0)
-                {
-                    //Datos.Instancia.ListaMed.Remove(item);
-                    //FALTA ELIMINAR DEL ARBOL
-                    ViewBag.Error = "No hay cantidad necesaria.";
-                }
+                Datos.Instancia.TotalPedido += Datos.Instancia.ListaMed[id].Precio;
+                Datos.Instancia.MedAVender.Add(Datos.Instancia.ListaMed[id]);
             }
+            else
+            {
+                ViewBag.Error = "No hay cantidad necesaria.";
+            }
+            
             Datos.Instancia.MedBuscados.Clear();
             return View(Datos.Instancia.ListaMed);
         }

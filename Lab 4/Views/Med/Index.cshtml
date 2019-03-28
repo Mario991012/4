@@ -10,7 +10,8 @@
 
 <section>
     <p>
-        @Html.ActionLink("Crear Pedido", "AgregarMed", "Pedido") | @Html.ActionLink("Ir a lista de Pedidos", "Index", "Pedido")
+            
+        @Html.ActionLink("Crear Pedido", "AgregarMed", "Pedido", FormMethod.Get) | @Html.ActionLink("Ir a lista de Pedidos", "Index", "Pedido")
     </p>
 </section>
 
@@ -51,7 +52,7 @@
 
         @if (Model == null)
         {
-            <span>Lista Vacia</span>
+        <p> Lista Vacia</p>
         }
         else
         {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace EstructurasLineales
@@ -34,7 +35,7 @@ namespace EstructurasLineales
         public bool HayNodosHijo(NodoB<T> Nodo)
         {
             
-            if(Nodo.hijos.Count == 0)
+            if(Nodo.Hijos.Count == 0)
             {
                 return false;
             }
@@ -56,6 +57,29 @@ namespace EstructurasLineales
                 return false;
             }
             
+        }
+
+        public int Buscador(string buscado, NodoB<T> Raiz)
+        {
+            int NodoEncontrado = -1;
+            bool encontrado = false;
+            foreach(var item in Raiz.Meds)
+            {
+                if(buscado.CompareTo(item.Nombre) == 0)
+                {
+                    NodoEncontrado = item.id;
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if(encontrado == false)
+            {
+                NodoEncontrado = Buscador(buscado, Raiz.Hijos[Comparador(Raiz, buscado)]);
+            }
+            
+
+            return NodoEncontrado;
         }
 
         public int Comparador(NodoB<T> Nodo, string nombre)
@@ -118,36 +142,20 @@ namespace EstructurasLineales
                 Nodo = NuevoNodoPadre;
                 NuevoNodoIzq.Padre = Nodo;
                 NuevoNodoDer.Padre = Nodo;
-                Nodo.hijos.Add(NuevoNodoIzq);
-                Nodo.hijos.Add(NuevoNodoDer);
-                NuevoNodoIzq.posicion = NuevoNodoIzq.AsignandoPosicion(Nodo.posicion);
-                NuevoNodoDer.posicion = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.posicion);
+                Nodo.Hijos.Add(NuevoNodoIzq);
+                Nodo.Hijos.Add(NuevoNodoDer);
+                NuevoNodoIzq.id = NuevoNodoIzq.AsignandoPosicion(Nodo.id);
+                NuevoNodoDer.id = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.id);
                 Nodo.EsRaiz = true;
                 Nodo.cantidadDentro = NuevoNodoPadre.Meds.Count();
-                Nodo.hijos.Sort((x, y) => x.CompareTo(y));
-                //////////////////////////////////////////
-                //NuevoNodoIzq.Padre = NuevoNodoPadre;
-                //NuevoNodoDer.Padre = NuevoNodoPadre;
+                Nodo.Hijos.Sort((x, y) => x.CompareTo(y));
 
-                //NuevoNodoPadre.Padre = Nodo.Padre;
-
-                //NuevoNodoPadre.hijos.Add(NuevoNodoIzq);
-                //NuevoNodoPadre.hijos.Add(NuevoNodoDer);
-
-                //NuevoNodoIzq.posicion = NuevoNodoIzq.AsignandoPosicion(Nodo.posicion);
-                //NuevoNodoDer.posicion = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.posicion);
-
-                //Nodo = NuevoNodoPadre;
-                //Nodo.EsRaiz = true;
-
-                //Nodo.cantidadDentro = NuevoNodoPadre.Meds.Count();
-                //Nodo.hijos.Sort((x, y) => x.CompareTo(y));
             }
             else if(Nodo.Padre != null)
             {
-                Nodo.Padre.hijos.Add(NuevoNodoIzq);
-                Nodo.Padre.hijos.Add(NuevoNodoDer);
-                Nodo.Padre.hijos.Remove(Nodo);
+                Nodo.Padre.Hijos.Add(NuevoNodoIzq);
+                Nodo.Padre.Hijos.Add(NuevoNodoDer);
+                Nodo.Padre.Hijos.Remove(Nodo);
 
                 Nodo.Padre.Meds.Add(Nodo.Meds[(Nodo.max / 2)]);
 
@@ -155,14 +163,14 @@ namespace EstructurasLineales
                 
                 Nodo.Padre.cantidadDentro = Nodo.Padre.Meds.Count();
 
-                NuevoNodoIzq.posicion = NuevoNodoIzq.AsignandoPosicion(Nodo.posicion);
-                NuevoNodoDer.posicion = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.posicion);
+                NuevoNodoIzq.id = NuevoNodoIzq.AsignandoPosicion(Nodo.id);
+                NuevoNodoDer.id = NuevoNodoDer.AsignandoPosicion(NuevoNodoIzq.id);
 
                 Nodo = Nodo.Padre;
                 Nodo.EsRaiz = true;
 
                 NuevoNodoIzq.Padre = NuevoNodoDer.Padre = Nodo;
-                Nodo.hijos.Sort((x, y) => x.CompareTo(y));
+                Nodo.Hijos.Sort((x, y) => x.CompareTo(y));
             }
             
 
@@ -174,13 +182,9 @@ namespace EstructurasLineales
             }
         }
 
-        public void Agregar(string nombre, int id, ref NodoB<T> Nodo)
+        public void Agregar(string nombre, int id, ref NodoB<T> Nodo,string ubicacion)
         {
-            if (NodoVacio(Nodo) == true)
-            {
-                AgregarYOrdenarANodo(nombre, id, Nodo);
-            }
-            else if(ExisteEspacio(Nodo) == true && HayNodosHijo(Nodo) == false)
+            if(ExisteEspacio(Nodo) == true && HayNodosHijo(Nodo) == false)
             {
                 AgregarYOrdenarANodo(nombre, id, Nodo);
             }
@@ -188,14 +192,19 @@ namespace EstructurasLineales
             {
                 Nodo.EsRaiz = true;
                 var nodo = new NodoB<T>();
-                nodo = Nodo.hijos[Comparador(Nodo, nombre)];
-                nodo.posicion = nodo.AsignandoPosicion(Nodo.posicion);
-                Agregar(nombre, id, ref nodo);
+                nodo = Nodo.Hijos[Comparador(Nodo, nombre)];
+                nodo.id = nodo.AsignandoPosicion(Nodo.id);
+                Agregar(nombre, id, ref nodo, ubicacion);
             }
 
             if (ExisteEspacio(Nodo) == false)
             {
                 Separar(ref Nodo);
+            }
+
+            using (StreamWriter sw = File.AppendText(ubicacion))
+            {
+                sw.Write(Nodo.InformacionNodo());
             }
         }
 

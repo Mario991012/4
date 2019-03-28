@@ -13,25 +13,37 @@ namespace EstructurasLineales
 
         public List<Info> Meds { get; set; }
 
-        public List<NodoB<T>> hijos { get; set; }
+        public List<NodoB<T>> Hijos { get; set; }
 
         public int cantidadDentro { get; set; }
         
         public NodoB<T> Padre { get; set; }
 
-        public int posicion { get; set; }
+        public int id { get; set; }
         public int max { get; set; }
         public int min { get; set; }
         public T nombrebuscado { get; set; }
-        
+
+        public string InformacionNodo()
+        {
+            string meds = "";
+
+
+            foreach (Info items in Meds)
+            {
+                meds += items.Nombre + "|";
+            }
+            return $"{id.ToString("00000;-0000")}|{max.ToString("00000;-0000")}|{min.ToString("00000;-0000")}|{cantidadDentro.ToString("00000;-0000")}|" + Meds;
+        }
+ 
 
         public NodoB()
         {
             cantidadDentro = 0;
             Meds = new List<Info>();
-            hijos = new List<NodoB<T>>();
+            Hijos = new List<NodoB<T>>();
             Padre = null;
-            posicion = 1;
+            id = 1;
             EsRaiz = false;
             min = 0;
             max = 0;
