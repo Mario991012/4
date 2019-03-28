@@ -44,7 +44,7 @@ namespace EstructurasLineales
                 Meds += $"{string.Format("{0,100}", items)}|";
             }
             buffer += 20;
-            return $"{id.ToString("00000;-0000")}|{padre.ToString("00000;-0000")}|" + hijos + Meds;
+            return $"{id.ToString("00000;-0000")}|{padre.ToString("00000;-0000")}|{max.ToString("00000;-0000")}|{min.ToString("00000;-0000")}|{cantidadDentro.ToString("00000;-0000")}|" + hijos + Meds;
         }
 
         public int FixedSizeText

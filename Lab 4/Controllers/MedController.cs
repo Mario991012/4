@@ -37,11 +37,6 @@ namespace Lab_4.Controllers
             var model = Server.MapPath("~/uploads/") + file.FileName;
             var informacion = Server.MapPath("~/uploads/Nodos.txt");
 
-            using (StreamWriter nodos = new StreamWriter(informacion))
-            {
-                nodos.WriteLine(grado);
-            }
-
             if (file.ContentLength > 0)
             {
                 file.SaveAs(model);
